@@ -100,7 +100,7 @@ Token Lexer::next()
 	case ':': return add_token(COLON); break;
 	case '?': return add_token(QUESTION); break;
 	case '/': return add_token(match('=') ? SLASH_EQUAL : SLASH);
-	case '%': return add_token(match('=') ? MOD_EQUAL : MOD);
+	case '%': return add_token(match('=') ? PERCENT_EQUAL : PERCENT);
 	case '"': return string('"'); break;
 	case '\'': return string('\''); break;
 	case '|': return add_token(match('|') ? OR : BIN_OR);

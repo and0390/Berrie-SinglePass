@@ -6,6 +6,7 @@
 #include "bryLexer.h"
 #include "tok_type.h"
 #include "bryChunk.h"
+#include "bryOpcode.h"
 
 using parse_rule = Parser::Parse_rule;
 using pcd = Parser::Precedence;
@@ -64,8 +65,8 @@ constexpr std::pair<Token_type, parse_rule> rule_table[] {
     {MINUS_MINUS, {nullptr, nullptr, pcd::PREC_NONE}},
     {BREAK,       {nullptr, nullptr, pcd::PREC_NONE}},
     {CONTINUE,    {nullptr, nullptr, pcd::PREC_NONE}},
-    {MOD,         {nullptr, nullptr, pcd::PREC_FACTOR}},
-    {MOD_EQUAL,   {nullptr, nullptr, pcd::PREC_ASSIGNMENT}},
+    {PERCENT,         {nullptr, nullptr, pcd::PREC_FACTOR}},
+    {PERCENT_EQUAL,   {nullptr, nullptr, pcd::PREC_ASSIGNMENT}},
     {PRINT,       {nullptr, nullptr, pcd::PREC_NONE}},
     {ENDFILE,     {nullptr, nullptr, pcd::PREC_NONE}},
     {LEXICALERROR,{nullptr, nullptr, pcd::PREC_NONE}},
@@ -102,21 +103,60 @@ void Parser::advance() {
     }
 }
 
-void Parser::binary(bool) {
+void Parser::parse_and_compile_binary(bool) {
     Token_type prev_type = tok_prev_.get_type();
+
+    // Acquiring current parse rule information
     parse_rule rule = rule_table[prev_type].second;
 
+    /// Check and parse operator with higher precedence
     parse_expression(static_cast<Precedence>(rule.precedence + 1));
 
     switch (prev_type) {
-        case PLUS:
+        case PLUS: emit_byte(Opcode::ADD); break;
+        case MINUS: emit_byte(Opcode::SUB); break;
+        case SLASH: emit_byte(Opcode::DIV); break;
+        case PERCENT: emit_byte(Opcode::MOD); break;
+        case EQUAL_EQUAL: emit_byte(Opcode::EQUAL); break;
+        case BANG_EQUAL: emit_bytes(Opcode::EQUAL, Opcode::NOT); break;
+        case LESS: emit_byte(Opcode::LESS); break;
+        case GREATER: emit_byte(Opcode::GREATER); break;
+        case LESS_EQUAL: emit_bytes(Opcode::GREATER, Opcode::NOT); break;
+        case GREATER_EQUAL: emit_bytes(Opcode::LESS, Opcode::NOT); break;
+        default: break;
     }
+}
+
+void Parser::parse_and_compile_unary(bool) {
+    Token_type prev_type = tok_prev_.get_type();
+
+    parse_expression(PREC_UNARY);
+
+    switch (prev_type) {
+        case MINUS: emit_byte(Opcode::NEG); break;
+        case PLUS: emit_byte(Opcode::POS); break;
+        case BANG: emit_byte(Opcode::NOT); break;
+        default: break;
+    }
+}
+
+void Parser::parse_and_compile_int(bool) {
+    std::int64_t value = 0;
+
+
+
+
 }
 
 Chunk * Parser::current_chunk() const noexcept {
     return chunk_;
 }
 
-void Parser::emit_byte(std::uint8_t byte) {
-    current_chunk()->write()
+void Parser::emit_byte(Opcode byte) {
+    current_chunk()->write(static_cast<std::uint8_t>(byte), tok_prev_.get_line());
+}
+
+void Parser::emit_bytes(Opcode byte1, Opcode byte2) {
+    emit_byte(byte1);
+    emit_byte(byte2);
 }

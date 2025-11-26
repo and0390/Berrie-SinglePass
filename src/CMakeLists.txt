@@ -13,6 +13,9 @@ add_executable(berrie main.cpp
         bryChunk.cpp
         bryParser.cpp
         bryString.cpp
-        bryToken.cpp)
+        bryToken.cpp
+        ../include/bryOpcode.h
+        ../include/bryGC.h
+        bryGC.cpp)
 target_compile_definitions(berrie PRIVATE PROJECT_ROOT="${CMAKE_SOURCE_DIR}")
 target_link_libraries(berrie PUBLIC dependencies)

@@ -72,8 +72,8 @@ namespace debug {
 			case BREAK:            return "BREAK";
 			case CONTINUE:         return "CONTINUE";
 
-			case MOD:              return "MOD";
-			case MOD_EQUAL:        return "MOD_EQUAL";
+			case PERCENT:              return "MOD";
+			case PERCENT_EQUAL:        return "MOD_EQUAL";
 
 			case PRINT:            return "PRINT";
 
@@ -89,9 +89,9 @@ namespace debug {
 
 	void print_token(Token token)
 	{
-		auto&& PLexeme = token.lexeme_.size() == 0 ? "None" : token.lexeme_;
-		auto&& PMessage = std::strlen(token.message_) == 0 ? "None" : token.message_;
-		fmt::print("Lexeme: '{}', Line: {}, Token type: {}, Message: {};\n", PLexeme, token.line_, tokType_to_stringLit(token.type_), PMessage);
+		auto&& PLexeme = token.get_lexeme().size() == 0 ? "None" : token.get_lexeme();
+		auto&& PMessage = std::strlen(token.get_message()) == 0 ? "None" : token.get_message();
+		fmt::print("Lexeme: '{}', Line: {}, Token type: {}, Message: {};\n", PLexeme, token.get_line(), tokType_to_stringLit(token.get_type()), PMessage);
 	}
 
 } //namespace debug

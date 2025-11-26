@@ -33,9 +33,8 @@ BString::BString(std::string_view value)
     : BObject(), value_(value)
 {}
 
-BFunction::BFunction(Chunk chunk, size_t upvalue_count, size_t arity, std::vector<std::int32_t> param_offset,
-    BString *name)
-        : chunk_(std::move(chunk)), upvalue_count_(upvalue_count), arity_(arity), param_offset_(std::move((param_offset)))
+BFunction::BFunction(Chunk chunk, size_t upvalue_count, size_t arity, std::vector<std::int32_t> param_offset, BString *name)
+    : chunk_(std::move(chunk)), upvalue_count_(upvalue_count), arity_(arity), param_offset_(std::move((param_offset)))
 {}
 
 

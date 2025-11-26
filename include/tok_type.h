@@ -24,7 +24,6 @@ enum Token_type
     COLON,
     QUESTION,
 
-
     BANG,
     BANG_EQUAL,
     EQUAL_EQUAL,
@@ -64,8 +63,8 @@ enum Token_type
     MINUS_MINUS,
     BREAK,
     CONTINUE,
-    MOD,
-    MOD_EQUAL,
+    PERCENT,
+    PERCENT_EQUAL,
     PRINT,
     ENDFILE,
     LEXICALERROR,

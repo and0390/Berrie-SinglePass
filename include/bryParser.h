@@ -5,6 +5,7 @@
 
 #include "bryToken.h"
 #include "bryObject.h"
+#include "bryOpcode.h"
 
 
 class Chunk;
@@ -40,10 +41,15 @@ public:
     Parser(Lexer* lexer, Chunk* chunk);
     void parse_expression(Precedence precedence);
     void advance();
-    void binary(bool);
+
+    /// @brief function to parse dan write binary operator into chunks
+    void parse_and_compile_binary(bool);
+    void parse_and_compile_unary(bool);
+    void parse_and_compile_int(bool);
 
     Chunk* current_chunk() const noexcept;
-    void emit_byte(std::uint8_t byte);
+    void emit_byte(Opcode byte);
+    void emit_bytes(Opcode byte1, Opcode byte2);
 
 
 private:

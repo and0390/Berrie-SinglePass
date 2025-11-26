@@ -8,7 +8,7 @@ Token::Token(std::string_view lexeme, Token_type type, std::int32_t line, const 
     : lexeme_{ lexeme }, type_{ type }, line_{ line }, message_{ message }
 {}
 
-const char * Token::message() const noexcept {
+const char * Token::get_message() const noexcept {
     return message_;
 }
 

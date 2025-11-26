@@ -15,7 +15,7 @@ public:
     std::string_view get_lexeme() const noexcept;
     Token_type get_type() const noexcept;
     std::int32_t get_line() const noexcept;
-    const char* message() const noexcept;
+    const char* get_message() const noexcept;
 private:
     std::string_view lexeme_;
     Token_type type_;
