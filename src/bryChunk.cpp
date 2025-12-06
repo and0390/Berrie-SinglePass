@@ -18,6 +18,11 @@ const Chunk::LineList & Chunk::get_lineList() const noexcept {
     return  lines_;
 }
 
+std::size_t Chunk::add_constant(BryObject* type) {
+    constants_.push_back(type);
+    return constants_.size() - 1;
+}
+
 const Chunk::CodeList & Chunk::get_codeList() const noexcept {
     return code_;
 }

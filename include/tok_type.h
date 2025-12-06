@@ -69,5 +69,7 @@ enum Token_type
     ENDFILE,
     LEXICALERROR,
     ARROW,
-    LAMBDA
+    LAMBDA,
+    ECHO,
+    SENTINEL
 };

@@ -36,11 +36,11 @@ Token Lexer::add_token(Token_type type)
 
 char Lexer::advance()
 {
-	if (current_ == INT32_MAX) {
-
-	}
+	// if (current_ == INT32_MAX) {
+	//
+	// }
 	current_++;
-	return source_[current_ - 1];
+	return source_.at(current_ - 1);
 }
 
 Lexer::Lexer(std::string_view source) noexcept
@@ -49,7 +49,6 @@ Lexer::Lexer(std::string_view source) noexcept
 
 Token Lexer::next()
 {
-
 	std::optional<Token> perhaps_error = skip_whitespace();
 
 	if (perhaps_error.has_value()) return perhaps_error.value();
@@ -180,7 +179,6 @@ Token Lexer::string(char trigger)
 {
 	while (!is_at_end() && peek() != trigger) {
 		if (peek() == '\n') {
-			line_++;
 			return Token{
 				{ source_.data() + start_, static_cast<size_t>(current_ - start_) },
 				LEXICALERROR,
@@ -264,6 +262,7 @@ constexpr std::pair<std::string_view, Token_type> keywords[] = {
 	{"break",   BREAK},
 	{"var",     VAR},
 	{"const",     CONST},
+	{"echo", ECHO},
 };
 
 Token Lexer::identifier()

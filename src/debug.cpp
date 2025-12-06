@@ -6,8 +6,13 @@
 #include <iostream>
 #include <fmt/core.h>
 #include <fmt/format.h>
+#include "bryChunk.h"
+#include "bryObject.h"
+#include "bryOpcode.h"
 
 namespace debug {
+
+
 	const char* tokType_to_stringLit(Token_type type)
 	{
 		switch (type)
@@ -82,16 +87,82 @@ namespace debug {
 
 			case ARROW:            return "ARROW";
 			case LAMBDA:           return "LAMBDA";
+			case ECHO: return "ECHO";
 
 			default:               return "UNKNOWN_TOKEN";
 		}
 	}
 
-	void print_token(Token token)
+	void print_token(const Token &token)
 	{
 		auto&& PLexeme = token.get_lexeme().size() == 0 ? "None" : token.get_lexeme();
 		auto&& PMessage = std::strlen(token.get_message()) == 0 ? "None" : token.get_message();
 		fmt::print("Lexeme: '{}', Line: {}, Token type: {}, Message: {};\n", PLexeme, token.get_line(), tokType_to_stringLit(token.get_type()), PMessage);
 	}
 
+	Diassembler::Diassembler(Chunk *chunk)
+		: chunk_(chunk), ip_(0)
+	{}
+
+	void Diassembler::print() {
+		for (;;) {
+
+			Opcode instruction = static_cast<Opcode>(read_byte());
+			switch (instruction) {
+				case Opcode::ADD : {
+					fmt::print("ADD\n");
+					break;
+				}
+
+				case Opcode::SUB : {
+					fmt::print("SUB\n");
+					break;
+				}
+
+				case Opcode::DIV : {
+					fmt::print("DIV\n");
+					break;
+				}
+
+				case Opcode::LOAD_CONST : {
+					std::uint16_t idx = read_index();
+					auto&& str = chunk_->get_constantList().at(idx)->to_str();
+					fmt::print("LOAD_CONST ; at {} ; value '{}'\n", idx, str);
+					break;
+				}
+
+				case Opcode::MUL : {
+					fmt::print("MUL\n");
+					break;
+				}
+
+				case Opcode::ECHO : {
+					fmt::println("ECHO");
+					break;
+				}
+
+				case Opcode::RETURN : {
+					return;
+				}
+
+				default : {
+					fmt::print("UNKNOWN\n");
+					break;
+				}
+			}
+		}
+	}
+
+	std::uint8_t Diassembler::read_byte() {
+		std::uint8_t instruction = chunk_->get_codeList().at(ip_);
+		ip_++;
+		return instruction;
+	}
+
+	std::uint16_t Diassembler::read_index() {
+		std::uint8_t low = read_byte();
+		std::uint8_t high = read_byte();
+		std::uint16_t i_reconstructed = (high << 8) | low;
+		return i_reconstructed;
+	}
 } //namespace debug

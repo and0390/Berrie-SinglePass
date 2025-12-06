@@ -5,6 +5,8 @@ add_library(dependencies
 )
 target_include_directories(dependencies PUBLIC ${PROJECT_SOURCE_DIR}/include)
 target_link_libraries(dependencies PUBLIC fmt::fmt-header-only)
+target_link_libraries(dependencies PUBLIC magic_enum::magic_enum)
+
 add_executable(berrie main.cpp
         ../include/bryParser.h
         ../include/bryChunk.h
@@ -16,6 +18,14 @@ add_executable(berrie main.cpp
         bryToken.cpp
         ../include/bryOpcode.h
         ../include/bryGC.h
-        bryGC.cpp)
+        bryGC.cpp
+        bryEngine.cpp
+        ../include/bryEngine.h
+        ../include/bryStack.h
+        ../include/utils.h
+        ../include/result.h
+        ../include/bryConstants.h
+        utils.cpp)
+
 target_compile_definitions(berrie PRIVATE PROJECT_ROOT="${CMAKE_SOURCE_DIR}")
 target_link_libraries(berrie PUBLIC dependencies)

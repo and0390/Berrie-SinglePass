@@ -5,12 +5,31 @@
 #ifndef BERRIE_BRYOPCODE_H
 #define BERRIE_BRYOPCODE_H
 
+#include <cstdint>
+
 enum class Opcode : std::uint8_t {
-    ADD, SUB, DIV ,MOD ,MUL,
+    ADD,
+    SUB,
+    DIV,
+    MOD,
+    MUL,
 
-    EQUAL, GREATER, LESS,
+    EQUAL,
+    GREATER,
+    LESS,
 
-    NOT, NEG, POS
+    NOT,
+    NEG,
+    POS,
+
+    LOAD_CONST,
+    INIT_GLOBAL,
+    SET_GLOBAL,
+    GET_GLOBAL,
+
+    RETURN,
+    ECHO,
+
 };
 
 #endif //BERRIE_BRYOPCODE_H
